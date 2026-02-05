@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Employee Form</title>
+  <style>
+    :root{
+      --border-dark:#7f7f7f;
+      --border-light:#dcdcdc;
+      --line:#b9b9b9;
+      --panel:#fff;
+      --muted:#666;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      padding:22px;
+      background:#fff;
+      font:12px/1.25 Arial, Helvetica, sans-serif;
+      color:#111;
+    }
+
+    .frame{
+      width: 430px;
+      margin: 0 auto;
+      border:1px solid var(--line);
+      background:var(--panel);
+    }
+
+    .inner{
+      padding:12px;
+    }
+
+    .section{
+      margin-bottom:10px;
+      border-top:1px solid var(--line);
+      padding-top:8px;
+    }
+    .section:first-child{
+      border-top:0;
+      padding-top:0;
+    }
+
+    .section-title{
+      font-weight:bold;
+      color:#000;
+      margin:0 0 8px 0;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 130px 1fr 22px;
+      gap:6px;
+      align-items:center;
+      margin:4px 0;
+    }
+    .row.no-icon{
+      grid-template-columns: 130px 1fr;
+    }
+
+    label{ color:#111; }
+
+    .req{ margin-left:2px; font-weight:bold; }
+
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea{
+      width:100%;
+      height:22px;
+      padding:3px 6px;
+      background:#fff;
+      border-top: 1px solid var(--border-dark);
+      border-left: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-light);
+      border-right: 1px solid var(--border-light);
+      outline:none;
+      font-size:12px;
+    }
+
+    textarea{
+      height:auto;
+      min-height:110px;
+      padding:6px;
+      line-height:1.25;
+      resize:vertical;
+    }
+
+    .icon{
+      width:18px;
+      height:18px;
+      border-top: 1px solid var(--border-light);
+      border-left: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-dark);
+      border-right: 1px solid var(--border-dark);
+      background:#efefef;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      color:#222;
+      user-select:none;
+    }
+
+    .radio-block{
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+    }
+    .radio-col{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .radio-col label{
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    select.classic{
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+      padding-right:20px;
+      background:
+        linear-gradient(#fff,#fff),
+        linear-gradient(45deg, transparent 50%, #000 50%),
+        linear-gradient(135deg, #000 50%, transparent 50%),
+        linear-gradient(#f0f0f0,#e6e6e6);
+      background-repeat:no-repeat;
+      background-size:
+        100% 100%,
+        6px 6px,
+        6px 6px,
+        18px 100%;
+      background-position:
+        0 0,
+        right 9px center,
+        right 5px center,
+        right 0 top;
+    }
+
+    select.country{
+      width:200px;
+    }
+
+    .notes-wrap{
+      border-top: 1px solid var(--border-dark);
+      border-left: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-light);
+      border-right: 1px solid var(--border-light);
+      background:#fff;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:4px;
+      flex-wrap:wrap;
+      padding:4px;
+      border-bottom:1px solid var(--line);
+      background:#efefef;
+    }
+    .tool{
+      width:18px;
+      height:18px;
+      border-top: 1px solid var(--border-light);
+      border-left: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-dark);
+      border-right: 1px solid var(--border-dark);
+      background:#fff;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:11px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .tool:active{
+      border-top: 1px solid var(--border-dark);
+      border-left: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-light);
+      border-right: 1px solid var(--border-light);
+      transform:translateY(1px);
+    }
+
+    .notes-area{ padding:6px; }
+
+    .divider-line{
+      border-top:1px solid var(--line);
+      margin:8px 0;
+    }
+
+    .inline{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .captcha{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .captcha-box{
+      width:120px;
+      height:26px;
+      border-top: 1px solid var(--border-dark);
+      border-left: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-light);
+      border-right: 1px solid var(--border-light);
+      background:linear-gradient(#fff,#f0f0f0);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:"Courier New", monospace;
+      letter-spacing:3px;
+      font-weight:bold;
+      color:#444;
+      user-select:none;
+      position:relative;
+      overflow:hidden;
+    }
+    .captcha-box::before,
+    .captcha-box::after{
+      content:"";
+      position:absolute;
+      left:-10%;
+      right:-10%;
+      height:1px;
+      background:rgba(0,0,0,.18);
+      transform:rotate(-10deg);
+      top:40%;
+    }
+    .captcha-box::after{
+      transform:rotate(12deg);
+      top:62%;
+      background:rgba(0,0,0,.12);
+    }
+
+    .footnote{
+      padding:0 12px 8px;
+      font-size:11px;
+    }
+
+    .actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:6px;
+      padding:8px 10px 10px;
+      border-top:1px solid var(--line);
+      background:#f2f2f2;
+    }
+
+    .win-btn{
+      font:12px Arial;
+      padding:3px 10px 3px 6px;
+      border-top:1px solid var(--border-light);
+      border-left:1px solid var(--border-light);
+      border-bottom:1px solid var(--border-dark);
+      border-right:1px solid var(--border-dark);
+      background:#efefef;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .win-btn:active{
+      border-top:1px solid var(--border-dark);
+      border-left:1px solid var(--border-dark);
+      border-bottom:1px solid var(--border-light);
+      border-right:1px solid var(--border-light);
+      transform:translateY(1px);
+    }
+    .win-btn .box{
+      width:10px;
+      height:10px;
+      border:1px solid #000;
+      background:#fff;
+      display:inline-block;
+    }
+
+    .static{
+      height:22px;
+      display:flex;
+      align-items:center;
+      padding-left:2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="inner">
+
+      <div class="section">
+        <div class="section-title">Basic Info</div>
+
+        <div class="row no-icon">
+          <label>Employee ID</label>
+          <div class="static">9</div>
+        </div>
+
+        <div class="row no-icon">
+          <label>Last Name</label>
+          <div class="static">Dodsworth</div>
+        </div>
+
+        <div class="row">
+          <label>First Name <span class="req">*</span></label>
+          <input type="text" value="Anne" />
+          <div class="icon">▣</div>
+        </div>
+
+        <div class="row no-icon" style="align-items:flex-start;margin-top:6px;">
+          <label style="padding-top:2px;">Gender</label>
+          <div class="radio-block">
+            <div class="radio-col">
+              <label><input type="radio" name="gender"> Male</label>
+              <label><input type="radio" name="gender" checked> Female</label>
+              <label><input type="radio" name="gender"> XXX</label>
+              <label><input type="radio" name="gender"> ZZZ</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row no-icon">
+          <label>Title</label>
+          <input type="text" value="Sales Representative" />
+        </div>
+
+        <div class="row no-icon">
+          <label>Suffix</label>
+          <input type="text" value="Ms." />
+        </div>
+
+        <div class="row">
+          <label>BirthDate</label>
+          <input type="text" value="1969-07-02 00:00:00" />
+          <div class="icon">?</div>
+        </div>
+
+        <div class="row">
+          <label>HireDate</label>
+          <input type="text" value="1994-11-15 00:00:00" />
+          <div class="icon">?</div>
+        </div>
+
+        <div class="row">
+          <label>SSN # (if applicable)</label>
+          <input type="text" value="" />
+          <div class="icon">🔍</div>
+        </div>
+
+        <div class="row no-icon">
+          <label>Reports To</label>
+          <select class="classic">
+            <option selected>Buchanan</option>
+            <option>Davolio</option>
+            <option>Fuller</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Contact Info</div>
+
+        <div class="row no-icon">
+          <label>Email</label>
+          <input type="text" placeholder="name@example.com" />
+        </div>
+
+        <div class="row no-icon">
+          <label>Address</label>
+          <input type="text" value="7 Houndstooth Rd." />
+        </div>
+
+        <div class="row no-icon">
+          <label>City</label>
+          <input type="text" value="London" />
+        </div>
+
+        <div class="row no-icon">
+          <label>Region</label>
+          <input type="text" value="" />
+        </div>
+
+        <div class="row no-icon">
+          <label>Postal Code</label>
+          <input type="text" value="WG2 7LT" />
+        </div>
+
+        <div class="row no-icon">
+          <label>Country</label>
+          <select class="classic country">
+            <option>United Kingdom</option>
+            <option selected>Russian Federation</option>
+            <option>United States</option>
+          </select>
+        </div>
+
+        <div class="row no-icon">
+          <label>US Home Phone</label>
+          <input type="text" value="(234)234-2342" />
+        </div>
+
+        <div class="row no-icon">
+          <label>Photo</label>
+          <input type="text" value="EmpID9.bmp" />
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Optional Info</div>
+
+        <div class="row no-icon" style="align-items:flex-start;">
+          <label style="padding-top:2px;">Notes</label>
+
+          <div class="notes-wrap">
+            <div class="toolbar" aria-label="fake toolbar">
+              <span class="tool" data-cmd="bold"><b>B</b></span>
+              <span class="tool" data-cmd="italic"><i>I</i></span>
+              <span class="tool" data-cmd="underline"><u>U</u></span>
+              <span class="tool" data-cmd="strikeThrough"><s>S</s></span>
+              <span class="tool" data-cmd="insertUnorderedList">•</span>
+              <span class="tool" data-cmd="insertOrderedList">1.</span>
+              <span class="tool" data-cmd="justifyLeft">≡</span>
+              <span class="tool" data-cmd="justifyCenter">≣</span>
+              <span class="tool" data-cmd="justifyRight">≡</span>
+              <span class="tool" data-cmd="removeFormat">✖</span>
+              <span class="tool" title="fake link">🔗</span>
+              <span class="tool" title="fake image">🖼</span>
+              <span class="tool" title="fake code">⌘</span>
+            </div>
+
+            <div class="notes-area">
+              <div id="notes"
+                   contenteditable="true"
+                   style="min-height:110px; outline:none; font:12px/1.25 Arial, Helvetica, sans-serif;">
+Anne has a BA degree in English from St. Lawrence College.<br/>
+She is fluent in French and German.ZZZ
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider-line"></div>
+
+        <div class="row no-icon">
+          <label>Preferred Shift</label>
+          <div class="inline">
+            <label style="display:flex;align-items:center;gap:6px;">
+              <input type="checkbox"> Regular
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;">
+              <input type="checkbox" checked> Gravy Yard
+            </label>
+          </div>
+        </div>
+
+        <div class="row no-icon">
+          <label>Active?</label>
+          <div class="inline">
+            <input type="checkbox">
+          </div>
+        </div>
+
+        <div class="row no-icon" style="align-items:flex-start;">
+          <label style="padding-top:2px;">Are you human?</label>
+          <div>
+            <div class="captcha">
+              <div class="captcha-box" id="captchaText">TIDAWO</div>
+              <button class="win-btn" type="button" id="regen" title="Click to change">
+                <span class="box"></span> Click to change
+              </button>
+            </div>
+
+            <div style="margin-top:6px;">
+              <input type="text" value="" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footnote"><b>*</b> required</div>
+
+    <div class="actions">
+      <button class="win-btn" type="button">
+        <span class="box"></span> Submit
+      </button>
+      <button class="win-btn" type="button">
+        <span class="box"></span> Cancel
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.tool[data-cmd]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cmd = btn.getAttribute('data-cmd');
+        document.execCommand(cmd, false, null);
+      });
+    });
+
+    function randomCaptcha(len=6){
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let s = "";
+      for(let i=0;i<len;i++){
+        s += chars[Math.floor(Math.random()*chars.length)];
+      }
+      return s;
+    }
+    const captchaEl = document.getElementById('captchaText');
+    document.getElementById('regen').addEventListener('click', () => {
+      captchaEl.textContent = randomCaptcha(6);
+    });
+  </script>
+</body>
+</html>
