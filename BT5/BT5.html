@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HR Management</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: #ffffff;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: #111;
+    }
+
+    .topbar {
+  background: #000000;
+  border-bottom: 1px solid #000000;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 26px;
+}
+
+    .brand {
+      color: #fff;
+      font-weight: 800;
+      font-size: 34px;
+      letter-spacing: 0.2px;
+      margin-right: 26px;
+      line-height: 1;
+    }
+    .navlinks a {
+      color: #e8ecef;
+      text-decoration: none;
+      font-size: 20px;
+      margin-right: 22px;
+    }
+    .navlinks a:last-child { margin-right: 0; }
+    .navlinks a:hover { color: #ffffff; }
+
+    .topbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .search-input {
+      width: 320px;
+      height: 44px;
+      border-radius: 8px;
+      border: 1px solid #cfd6dd;
+      padding: 0 16px;
+      font-size: 20px;
+      outline: none;
+      box-shadow: 0 1px 0 rgba(0,0,0,.06) inset;
+    }
+    .search-btn {
+      height: 44px;
+      padding: 0 22px;
+      border-radius: 8px;
+      background: transparent;
+      border: 2px solid #cfd6dd;
+      color: #ffffff;
+      font-size: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .page {
+      width: 100%;
+      padding: 26px 26px 0;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+      margin-bottom: 18px;
+    }
+    .title {
+      font-size: 44px;
+      font-weight: 800;
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    .add-btn {
+      background: #0d6efd;
+      border: 0;
+      color: #fff;
+      font-size: 22px;
+      padding: 12px 18px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 1px 0 rgba(0,0,0,.06);
+    }
+    .add-btn .plus {
+      font-weight: 800;
+      font-size: 22px;
+      line-height: 1;
+      display: inline-block;
+      transform: translateY(-1px);
+    }
+
+    .table-shell {
+      background: #ffffff;
+      border: 1px solid #e3e8ee;
+      border-radius: 2px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.08);
+      overflow: hidden;
+      max-width: 100%;
+    }
+
+    table.hr-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table.hr-table thead th {
+  background: #ffffff;
+  font-size: 22px;
+  font-weight: 800;
+  padding: 18px 18px;
+  text-align: left;
+  border-bottom: 1px solid #e3e8ee;
+}
+
+
+    table.hr-table tbody td {
+      font-size: 22px;
+      padding: 18px 18px;
+      border-bottom: 1px solid #e3e8ee;
+      vertical-align: middle;
+    }
+    table.hr-table tbody tr:last-child td { border-bottom: 0; }
+
+    table.hr-table th, table.hr-table td {
+      border-left: 0 !important;
+      border-right: 0 !important;
+    }
+
+    .col-id { width: 70px; }
+    .col-name { width: 260px; }
+    .col-email { width: 520px; }
+    .col-phone { width: 240px; }
+    .col-position { width: 180px; }
+    .col-action { width: 260px; }
+
+    .action-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn-edit {
+      background: #ffc107;
+      border: 0;
+      color: #111;
+      font-size: 20px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: 700;
+      box-shadow: 0 1px 0 rgba(0,0,0,.08);
+    }
+    .btn-del {
+      background: #dc3545;
+      border: 0;
+      color: #fff;
+      font-size: 20px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: 700;
+      box-shadow: 0 1px 0 rgba(0,0,0,.08);
+    }
+
+    .modal-header.blue {
+      background: #0d6efd;
+      color: #fff;
+      border-bottom: 0;
+    }
+    .modal-header.blue .btn-close { filter: invert(1); opacity: .9; }
+
+    @media (max-width: 900px) {
+      .brand { font-size: 26px; }
+      .navlinks a { font-size: 18px; }
+      .search-input { width: 220px; font-size: 18px; }
+      .search-btn { font-size: 18px; }
+      .title { font-size: 36px; }
+      table.hr-table thead th, table.hr-table tbody td { font-size: 18px; }
+      .add-btn { font-size: 18px; padding: 10px 14px; }
+      .btn-edit, .btn-del { font-size: 18px; padding: 8px 14px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="brand">HR Management</div>
+    <div class="navlinks">
+      <a href="#">Home</a>
+      <a href="#" style="opacity:.85">Contact</a>
+    </div>
+
+    <div class="topbar-right">
+      <form class="d-flex align-items-center gap-3 m-0" onsubmit="event.preventDefault(); applySearch();">
+        <input id="searchInput" class="search-input" type="search" placeholder="Search..." />
+        <button class="search-btn" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="header-row">
+      <h1 class="title">Employee</h1>
+      <button class="add-btn" type="button" data-bs-toggle="modal" data-bs-target="#employeeModal" onclick="openCreate()">
+        <span class="plus">+</span> Add
+      </button>
+    </div>
+
+    <div class="table-shell">
+      <div class="table-responsive">
+        <table class="hr-table">
+          <thead>
+            <tr>
+              <th class="col-id">ID</th>
+              <th class="col-name">Name</th>
+              <th class="col-email">Email</th>
+              <th class="col-phone">Phone</th>
+              <th class="col-position">Position</th>
+              <th class="col-action">Action</th>
+            </tr>
+          </thead>
+          <tbody id="employeeTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="employeeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header blue">
+          <h5 class="modal-title" id="modalTitle">New Employee</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <form id="employeeForm" onsubmit="event.preventDefault(); saveEmployee();">
+            <input type="hidden" id="editingId" />
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Name</label>
+                <input id="name" type="text" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input id="email" type="email" class="form-control" />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                <input id="phone" type="tel" class="form-control" />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Position</label>
+                <select id="position" class="form-select">
+                  <option value="" selected>--- Select Position ---</option>
+                  <option value="Staff">Staff</option>
+                  <option value="Manager">Manager</option>
+                  <option value="CEO">CEO</option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label d-block">Sex</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="sex" id="male" value="Male">
+                  <label class="form-check-label" for="male">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="sex" id="female" value="Female">
+                  <label class="form-check-label" for="female">Female</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-success px-4">Save</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let employees = [
+      { id: 1, name: "Fatima Beatriz", email: "Fatima Beatriz@gmail.com", phone: "0985674321", position: "Staff", sex: "Female" },
+      { id: 2, name: "Gabriel Hanna", email: "Gabriel Hanna@gmail.com", phone: "0353674231", position: "Staff", sex: "Male" },
+      { id: 3, name: "Charles Diya",  email: "Charles Diya@gmail.com",  phone: "0347658833", position: "Staff", sex: "Male" },
+      { id: 4, name: "Frank Lamdo",   email: "Frank Lamdo@gmail.com",   phone: "0975444768", position: "Manager", sex: "Male" },
+      { id: 5, name: "Louis Tom",     email: "Louis Tom@gmail.com",     phone: "0789568223", position: "Staff", sex: "Male" }
+    ];
+
+    let filteredEmployees = [...employees];
+
+    const tbody = document.getElementById("employeeTbody");
+    const modalEl = document.getElementById("employeeModal");
+    const modal = new bootstrap.Modal(modalEl);
+
+    function renderTable(list) {
+      tbody.innerHTML = "";
+      list.forEach(emp => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${emp.id}</td>
+          <td>${escapeHtml(emp.name)}</td>
+          <td>${escapeHtml(emp.email)}</td>
+          <td>${escapeHtml(emp.phone)}</td>
+          <td>${escapeHtml(emp.position || "")}</td>
+          <td>
+            <div class="action-wrap">
+              <button class="btn-edit" type="button" onclick="openEdit(${emp.id})">Edit</button>
+              <button class="btn-del" type="button" onclick="deleteEmployee(${emp.id})">Delete</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openCreate() {
+      document.getElementById("modalTitle").textContent = "New Employee";
+      document.getElementById("editingId").value = "";
+      document.getElementById("employeeForm").reset();
+      document.getElementById("position").value = "";
+    }
+
+    function openEdit(id) {
+      const emp = employees.find(e => e.id === id);
+      if (!emp) return;
+
+      document.getElementById("modalTitle").textContent = "New Employee";
+      document.getElementById("editingId").value = emp.id;
+
+      document.getElementById("name").value = emp.name;
+      document.getElementById("email").value = emp.email;
+      document.getElementById("phone").value = emp.phone;
+      document.getElementById("position").value = emp.position || "";
+
+      document.getElementById("male").checked = emp.sex === "Male";
+      document.getElementById("female").checked = emp.sex === "Female";
+
+      modal.show();
+    }
+
+    function saveEmployee() {
+      const editingId = document.getElementById("editingId").value.trim();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const position = document.getElementById("position").value;
+      const sex = document.querySelector('input[name="sex"]:checked')?.value || "";
+
+      if (!name || !email || !phone || !position || !sex) {
+        alert("Vui lòng nhập đủ Name / Email / Phone / Position / Sex.");
+        return;
+      }
+
+      if (editingId) {
+        const idx = employees.findIndex(e => String(e.id) === editingId);
+        if (idx >= 0) employees[idx] = { id: employees[idx].id, name, email, phone, position, sex };
+      } else {
+        const nextId = employees.length ? Math.max(...employees.map(e => e.id)) + 1 : 1;
+        employees.push({ id: nextId, name, email, phone, position, sex });
+      }
+
+      applySearch(true);
+      modal.hide();
+    }
+
+    function deleteEmployee(id) {
+      const emp = employees.find(e => e.id === id);
+      if (!emp) return;
+      if (!confirm(`Delete employee "${emp.name}"?`)) return;
+
+      employees = employees.filter(e => e.id !== id);
+      applySearch(true);
+    }
+
+    function applySearch() {
+      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+      filteredEmployees = q
+        ? employees.filter(e =>
+            e.name.toLowerCase().includes(q) ||
+            e.email.toLowerCase().includes(q) ||
+            e.phone.toLowerCase().includes(q) ||
+            (e.position || "").toLowerCase().includes(q)
+          )
+        : [...employees];
+
+      renderTable(filteredEmployees);
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    renderTable(filteredEmployees);
+  </script>
+</body>
+</html>
